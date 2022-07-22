@@ -1,20 +1,24 @@
-console.log('My-store');
-
 const express = require('express');
-const config = require('./config')
-const router = require('./routes/router')
+const routerApi = require('./routes/router');
+const config = require('./config');
 
-const app = express()
-app.use(express.json())
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/error.handler');
 
+const app = express();
 
-router(app)
-
+app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
+    res.send('Hello world');
+});
+
+routerApi(app);
+
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
+
 
 app.listen(config.port, () => {
-    console.log(`Server is running on port ${config.port}`);
-})
+    console.log(`Server running on port ${config.port}`);
+});
