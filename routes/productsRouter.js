@@ -3,6 +3,8 @@ const faker = require('faker');
 
 const router = express.Router();
 
+//* Métodos Get para el consumo de los productos */
+
 router.get('/', (req, res) => {
     const products = []
     const { size } = req.query
@@ -34,5 +36,18 @@ router.get('/:id', (req, res) => {
         "price": "100"
     })
 })
+
+// * Métodos Post para el ingreso de infformación de los productos */
+
+
+router.post('/', (req, res) => {
+    const body = req.body
+
+    res.json({
+        "message": "created",
+        "body": body
+    })
+})
+
 
 module.exports = router;

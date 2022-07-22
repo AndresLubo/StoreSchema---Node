@@ -5,6 +5,7 @@ const config = require('./config')
 const router = require('./routes/router')
 
 const app = express()
+app.use(express.json())
 
 
 router(app)
