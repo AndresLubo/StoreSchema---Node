@@ -1,9 +1,10 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
-const { USER_TABLE } = require('./user.model')
+const { Model, DataTypes, Sequelize } = require('sequelize')
+const { CATEGORY_TABLE } = require('./category.model')
 
-const CUSTOMER_TABLE = 'customers';
+const PRODUCT_TABLE = 'products'
 
-const CustomerSchema = {
+const ProductSchema = {
+
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,16 +14,18 @@ const CustomerSchema = {
     name: {
         allowNull: false,
         type: DataTypes.STRING,
-
     },
-    lastName: {
+    image: {
         allowNull: false,
-        type: DataTypes.STRING,
-        field: 'last_name'
+        type: DataTypes.STRING
     },
-    phone: {
+    description: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT
+    },
+    price: {
+        allowNull: false,
+        type: DataTypes.DECIMAL(10, 2)
     },
     createdAt: {
         allowNull: false,
@@ -30,40 +33,37 @@ const CustomerSchema = {
         field: 'created_at',
         defaultValue: Sequelize.NOW
     },
-    userId: {
+    categoryId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'user_id',
+        field: 'category_id',
         references: {
-            model: USER_TABLE,
+            model: CATEGORY_TABLE,
             key: 'id'
         },
-        unique: true,
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
     }
 }
 
 
-class Customer extends Model {
+class Product extends Model {
     static associate(models) {
-        this.belongsTo(models.User, { as: 'user' })
-        this.hasMany(models.Order, { as: 'orders', foreignKey: 'customerId' })
+        this.belongsTo(models.Category, { as: 'category' })
     }
 
     static config(sequelize) {
         return {
             sequelize,
-            tableName: CUSTOMER_TABLE,
-            modelName: 'Customer',
+            tableName: PRODUCT_TABLE,
+            modelName: 'Product',
             timestamps: false
         }
     }
 }
 
-
 module.exports = {
-    CUSTOMER_TABLE,
-    CustomerSchema,
-    Customer
+    PRODUCT_TABLE,
+    ProductSchema,
+    Product,
 }
