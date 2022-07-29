@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 
 const whiteList = ['http://localhost:3000', 'https://myapp.co']
+
 const options = {
     origin: (origin, callback) => {
         if (whiteList.includes(origin) || !origin) {
@@ -19,12 +20,13 @@ const options = {
         }
     }
 }
+
 app.use(cors(options));
+require('./utils/auth/');
 
-app.get('/', (req, res) => {
-    res.send('Hello world');
-});
 
+
+// Este endpoint es de prueba para la apiKey
 app.get('/nueva-ruta', checkApiKey, (req, res) => {
     res.send('Hola, soy una nueva ruta')
 })
