@@ -1,25 +1,14 @@
 const { Strategy } = require('passport-local');
-const boom = require('@hapi/boom')
-const UserService = require('../../../services/user.service');
-const verifyPassword = require('../../../pass-verify')
+const AuthService = require('../../../services/auth.service');
 
-const service = new UserService();
+const service = new AuthService();
 
 const LocalStrategy = new Strategy({
     usernameField: 'email',
 }, async(email, password, done) => {
     try {
-        const user = await service.findByEmail(email)
-
-        if (!user) done(boom.unauthorized('El usuario no existe'), false)
-
-        const isMatch = await verifyPassword(password, user.password)
-
-        if (!isMatch) done(boom.unauthorized('Contraseña erronea'), false)
-
-        delete user.dataValues.password
-        done(null, user)
-
+        const user = await service.getUser(email, password)
+        done(user)
     } catch (error) {
         done(error, false)
     }
